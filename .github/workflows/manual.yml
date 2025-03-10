@@ -3,13 +3,17 @@ on:
   workflow_dispatch:
     inputs:
       name:
-        description: 'Person to greet'
-        default: 'World'
+        description: 'Major, minor, patch?'
+        default: 'patch'
         required: true
         type: string
 jobs:
-  greet:
+  bump_version:
     runs-on: ubuntu-latest
     steps:
-    - name: Send greeting
-      run: echo "Hello ${{ inputs.name }}"
+    - name: Bump version
+      run: | 
+        LATEST_TAG=$(git describe --tags --match "v*" --abbrev=0 2>/dev/null || echo "v.0.0.0")
+        echo "Latest tag: $LATEST_TAG"
+        
+      
