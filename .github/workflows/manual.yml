@@ -8,7 +8,13 @@ on:
         required: true
         type: string
 jobs:
-  calculate:
+  lint_test_build:
+    name: Lint, test and build
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Lint, test and build"
+
+  calculate_next_version:
     name: Calculate next version
     runs-on: ubuntu-latest
     steps:
@@ -44,4 +50,40 @@ jobs:
         echo "NEW_VERSION=$MAJOR.$MINOR.$PATCH" >> $GITHUB_ENV
 
     - name: Print new version
-      run: echo "$NEW_VERSION"  
+      run: echo "$NEW_VERSION
+    
+  update_csproj:
+      name: Update .csproj
+      runs-on: ubuntu-latest
+      needs: [lint_test_build]
+      steps:
+          - run: echo "Update .csproj"
+
+  merge_to_prod:
+      name: Merge to prod
+      runs-on: ubuntu-latest
+      needs: [update_csproj]
+      steps:
+          - run: echo "Update .csproj"
+
+  deploy:
+      name: Deploy to prod
+      runs-on: ubuntu-latest
+      needs: [merge_to_prod]
+      steps:
+          - run: echo "Deploy"
+
+  create_release_tag:
+      name: Create release tag
+      runs-on: ubuntu-latest
+      needs: [deploy]
+      steps:
+          - run: echo "Create release tag"
+
+  create_release:
+      name: Create release on GitHub
+      runs-on: ubuntu-latest
+      needs: [create_release_tag]
+      steps:
+          - run: echo "Create release on GitHub"
+
