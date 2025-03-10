@@ -50,7 +50,7 @@ jobs:
         elif [ "${{ inputs.name }}" == "patch" ]; then
           PATCH=$((PATCH+1))
         fi
-        echo "NEXT_VERSION=$MAJOR.$MINOR.$PATCH" >> $GITHUB_ENV
+        echo "NEXT_VERSION=$MAJOR.$MINOR.$PATCH" >> $GITHUB_OUTPUT
 
     - name: Print new version
       run: echo "$NEXT_VERSION"
