@@ -77,6 +77,8 @@ jobs:
       name: Create release tag
       runs-on: ubuntu-latest
       needs: [deploy]
+      permissions:
+        contents: write
       steps:
         - uses: actions/checkout@v4
         - run: gh release create "v$NEXT_VERSION" --title "Release v$NEXT_VERSION" --generate-notes
