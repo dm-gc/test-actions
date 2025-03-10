@@ -71,7 +71,7 @@ jobs:
       steps:
           - uses: actions/checkout@v4
           - run: |
-              git fetch origin
+              git fetch origin --allow-unrelated-histories
               git checkout production 2>/dev/null || git checkout -b production
               git merge main
               git push origin production
