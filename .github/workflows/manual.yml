@@ -71,9 +71,9 @@ jobs:
       steps:
           - uses: actions/checkout@v4
           - run: |
-              git fetch origin --allow-unrelated-histories
+              git fetch origin
               git checkout production 2>/dev/null || git checkout -b production
-              git merge main
+              git merge main --allow-unrelated-histories
               git push origin production
             env:
               GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
