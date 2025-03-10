@@ -13,12 +13,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Get latest tag
-    -  run: | 
+    - run: | 
         LATEST_TAG=$(git describe --tags --match "v*" --abbrev=0 2>/dev/null || echo "v0.0.0")
         echo "Latest tag: $LATEST_TAG"
 
     - name: Remove v prefix
-    -  run: |    
+    - run: |    
         VERSION=$(echo "$LATEST_TAG" | sed 's/v//')
         echo "Version without v: $VERSION"
 
@@ -34,5 +34,4 @@ jobs:
         echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
 
     - name: Print new version
-    - run: echo "$NEW_VERSION"
-        
+    - run: echo "$NEW_VERSION"  
