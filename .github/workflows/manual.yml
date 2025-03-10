@@ -17,5 +17,7 @@ jobs:
         echo "Latest tag: $LATEST_TAG"
         VERSION=$(echo "$LATEST_TAG" | sed 's/v//')
         echo "Version without v: $VERSION"
-        SPLIT_VERSION='.' read -r MAJOR MINOR PATCH <<< "$VERSION"
+        MAJOR=$(echo "$VERSION" | cut -d. -f1)
+        MINOR=$(echo "$VERSION" | cut -d. -f2)
+        PATCH=$(echo "$VERSION" | cut -d. -f3)
         echo "Split: $MAJOR, $MINOR, $PATCH"
