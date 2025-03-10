@@ -1,4 +1,4 @@
-name: Manual workflow
+name: Release
 on:
   workflow_dispatch:
     inputs:
@@ -17,6 +17,8 @@ jobs:
   calculate_next_version:
     name: Calculate next version
     runs-on: ubuntu-latest
+    outputs:
+      next_version: $ {{ steps.bump_version.outputs.NEXT_VERSION }}
     steps:
     - uses: actions/checkout@v4
       with:
@@ -33,6 +35,7 @@ jobs:
         echo "VERSION=$VERSION" >>  $GITHUB_ENV
 
     - name: Bump version
+      id: bump_version
       run: |
         MAJOR=$(echo "$VERSION" | cut -d. -f1)
         MINOR=$(echo "$VERSION" | cut -d. -f2)
@@ -47,10 +50,10 @@ jobs:
         elif [ "${{ inputs.name }}" == "patch" ]; then
           PATCH=$((PATCH+1))
         fi
-        echo "NEW_VERSION=$MAJOR.$MINOR.$PATCH" >> $GITHUB_ENV
+        echo "NEXT_VERSION=$MAJOR.$MINOR.$PATCH" >> $GITHUB_ENV
 
     - name: Print new version
-      run: echo "$NEW_VERSION"
+      run: echo "$NEXT_VERSION"
     
   update_csproj:
       name: Update .csproj
@@ -81,6 +84,6 @@ jobs:
         contents: write
       steps:
         - uses: actions/checkout@v4
-        - run: gh release create "v$NEW_VERSION" --title "Release v$NEW_VERSION" --generate-notes
+        - run: gh release create "v${{ needs.bump_version.outputs.next_version }}" --generate-notes
           env:
             GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
