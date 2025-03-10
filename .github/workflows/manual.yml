@@ -75,7 +75,7 @@ jobs:
               git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
               git fetch origin
               git checkout production 2>/dev/null || git checkout -b production
-              git merge main -s theirs --allow-unrelated-histories
+              git merge main -X theirs --allow-unrelated-histories
               git push origin production
             env:
               GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
