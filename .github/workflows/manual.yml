@@ -12,12 +12,27 @@ jobs:
     name: Calculate next version
     runs-on: ubuntu-latest
     steps:
-    - run: | 
+    - name: Get latest tag
+    -  run: | 
         LATEST_TAG=$(git describe --tags --match "v*" --abbrev=0 2>/dev/null || echo "v0.0.0")
         echo "Latest tag: $LATEST_TAG"
+
+    - name: Remove v prefix
+    -  run: |    
         VERSION=$(echo "$LATEST_TAG" | sed 's/v//')
         echo "Version without v: $VERSION"
+
+    - name: Bump version
+    - run: |
         MAJOR=$(echo "$VERSION" | cut -d. -f1)
         MINOR=$(echo "$VERSION" | cut -d. -f2)
         PATCH=$(echo "$VERSION" | cut -d. -f3)
-        echo "Split: $MAJOR, $MINOR, $PATCH"
+        if ["${{ github.event.inputs.name = 'major' }}"]; then $NEW_VERSION="((MAJOR+1)).0.0" 
+        elif ["${{ github.event.inputs.name = 'minor' }}"]; then $NEW_VERSION="$MAJOR.((MINOR+1)).0"
+        elif ["${{ github.event.inputs.name = 'patch' }}"]; then $NEW_VERSION="$MAJOR.$MINOR.((PATCH+1))"
+        fi
+        echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
+
+    - name: Print new version
+    - run: echo "$NEW_VERSION"
+        
