@@ -79,11 +79,11 @@ jobs:
   create_release_and_tag:
       name: Create release tag
       runs-on: ubuntu-latest
-      needs: [deploy]
+      needs: [calculate_next_version, deploy]
       permissions:
         contents: write
       steps:
         - uses: actions/checkout@v4
-        - run: gh release create "v${{ needs.bump_version.outputs.next_version }}" --generate-notes
+        - run: gh release create "v${{ needs.calculate_next_version.outputs.next_version }}" --generate-notes
           env:
             GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
