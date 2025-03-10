@@ -81,6 +81,6 @@ jobs:
         contents: write
       steps:
         - uses: actions/checkout@v4
-        - run: gh release create "v$NEXT_VERSION" --title "Release v$NEXT_VERSION" --generate-notes
+        - run: gh release create "v$NEW_VERSION" --title "Release v$NEW_VERSION" --generate-notes
           env:
             GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
