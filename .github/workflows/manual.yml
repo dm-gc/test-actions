@@ -18,7 +18,7 @@ jobs:
     name: Calculate next version
     runs-on: ubuntu-latest
     outputs:
-      next_version: $ {{ steps.bump_version.outputs.NEXT_VERSION }}
+      next_version: ${{ steps.bump_version.outputs.NEXT_VERSION }}
     steps:
     - uses: actions/checkout@v4
       with:
