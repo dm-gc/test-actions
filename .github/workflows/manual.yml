@@ -66,8 +66,17 @@ jobs:
       name: Merge to prod
       runs-on: ubuntu-latest
       needs: [update_csproj]
+      permissions:
+        contents: write
       steps:
-          - run: echo "Update .csproj"
+          - uses: actions/checkout@v4
+          - run: |
+              git fetch origin
+              git checkout production 2>/dev/null || git checkout -b production
+              git merge main
+              git push origin production
+            env:
+              GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   deploy:
       name: Deploy to prod
