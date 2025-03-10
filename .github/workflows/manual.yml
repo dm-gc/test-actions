@@ -29,19 +29,16 @@ jobs:
         MAJOR=$(echo "$VERSION" | cut -d. -f1)
         MINOR=$(echo "$VERSION" | cut -d. -f2)
         PATCH=$(echo "$VERSION" | cut -d. -f3)
-        if [ ${{ github.event.inputs.name == 'major' }} ]; then
+        if [ "${{ inputs.name }}" == "major" ]; then
           MAJOR=$((MAJOR+1))
           MINOR=0
           PATCH=0
-        elif [ ${{ github.event.inputs.name == 'minor' }} ]; then 
+        elif [ "${{ inputs.name }}" == "minor" ]; then 
           MINOR=$((MINOR+1))
           PATCH=0
-        elif [ ${{ github.event.inputs.name == 'patch' }} ]; then
+        elif [ "${{ inputs.name }}" == "patch" ]; then
           PATCH=$((PATCH+1))
         fi
-        echo "$MAJOR"
-        echo "$MINOR"
-        echo "$PATCH"
         echo "NEW_VERSION=$MAJOR.$MINOR.$PATCH" >> $GITHUB_ENV
 
     - name: Print new version
