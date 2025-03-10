@@ -29,9 +29,9 @@ jobs:
         MAJOR=$(echo "$VERSION" | cut -d. -f1)
         MINOR=$(echo "$VERSION" | cut -d. -f2)
         PATCH=$(echo "$VERSION" | cut -d. -f3)
-        if ["${{ inputs.name == 'major' }}"]; then $NEW_VERSION="((MAJOR+1)).0.0"
-        elif ["${{ inputs.name == 'minor' }}"]; then $NEW_VERSION="$MAJOR.((MINOR+1)).0"
-        elif ["${{ inputs.name == 'patch' }}"]; then $NEW_VERSION="$MAJOR.$MINOR.((PATCH+1))"
+        if [ ${{ inputs.name == 'major' }} ]; then $NEW_VERSION="((MAJOR+1)).0.0"
+        elif [ ${{ inputs.name == 'minor' }} ]; then $NEW_VERSION="$MAJOR.((MINOR+1)).0"
+        elif [ ${{ inputs.name == 'patch' }} ]; then $NEW_VERSION="$MAJOR.$MINOR.((PATCH+1))"
         fi
         echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
 
