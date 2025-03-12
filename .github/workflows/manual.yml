@@ -31,15 +31,15 @@ jobs:
 
     - name: Remove v prefix
       run: |    
-        VERSION=$(echo "$LATEST_TAG" | sed 's/v//')
-        echo "VERSION=$VERSION" >>  $GITHUB_ENV
+        LATEST_VERSION=$(echo "$LATEST_TAG" | sed 's/v//')
+        echo "LATEST_VERSION=$LATEST_VERSION" >>  $GITHUB_ENV
 
     - name: Bump version
       id: bump_version
       run: |
-        MAJOR=$(echo "$VERSION" | cut -d. -f1)
-        MINOR=$(echo "$VERSION" | cut -d. -f2)
-        PATCH=$(echo "$VERSION" | cut -d. -f3)
+        MAJOR=$(echo "$LATEST_VERSION" | cut -d. -f1)
+        MINOR=$(echo "$LATEST_VERSION" | cut -d. -f2)
+        PATCH=$(echo "$LATEST_VERSION" | cut -d. -f3)
         if [ "${{ inputs.name }}" == "major" ]; then
           MAJOR=$((MAJOR+1))
           MINOR=0
@@ -51,10 +51,7 @@ jobs:
           PATCH=$((PATCH+1))
         fi
         echo "NEXT_VERSION=$MAJOR.$MINOR.$PATCH" >> $GITHUB_OUTPUT
-
-    - name: Print new version
-      run: echo "$NEXT_VERSION"
-    
+  
   update_csproj:
       name: Update .csproj
       runs-on: ubuntu-latest
