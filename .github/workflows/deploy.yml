@@ -1,11 +1,10 @@
 name: Deploy
 on:
-  push:
-    tags:
-      - 'v*'
+  release:
+    types: [published]
 jobs:
   deploy:
     name: Deploy to production server
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Lint, test and build"
+      - run: echo "Deploying..."
