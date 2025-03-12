@@ -93,6 +93,5 @@ jobs:
 
   deploy:
     name: Deploy
-    needs: 
-      [create_tag_and_release]
-    uses: dm-gc/test-actions/edit/main/.github/workflows/deploy.yml@main
+    needs: [create_tag_and_release]
+    uses: dm-gc/test-actions/edit/main/.github/workflows/create-new-release.yml@main
