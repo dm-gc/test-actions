@@ -62,10 +62,11 @@ jobs:
       permissions:
         contents: write
       steps:
+          - name: Checkout
           - uses: actions/checkout@v4
-          - run: echo "Update .csproj"
   
           - name: Update .csproj file
+            id: update
             uses: vers-one/dotnet-project-version-updater@v1.7
             with:
               file: "Example.csproj"
