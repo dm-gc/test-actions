@@ -11,4 +11,4 @@ jobs:
       - name: Hello
         run: echo "`jq '.connectionStrings.myConnectionString="$SECRET_CONN_STRING"' appSettings.json`" > appSettings.json
       - name: read json
-        run: cat json
+        run: cat appSettings.json
