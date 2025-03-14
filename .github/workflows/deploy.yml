@@ -12,6 +12,6 @@ jobs:
         uses: actions/checkout@v4
     
       - name: Hello
-        run: echo "`jq '.connectionStrings.myConnectionString=${{ SECRET_CONN_STRING }}' appSettings.json`" > appSettings.json
+        run: echo "`jq --arg SECRET_CONN_STRING "$SECRET_CONN_STRING" '.connectionStrings.myConnectionString=$SECRET_CONN_STRING' appSettings.json`" > appSettings.json
       - name: read json
         run: cat appSettings.json
