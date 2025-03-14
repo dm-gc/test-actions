@@ -5,6 +5,8 @@ jobs:
   deploy:
     name: Deploy to production server
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     env:
       SECRET_CONN_STRING: ${{ secrets.SECRET_CONN_STRING }}
     steps:
