@@ -1,9 +1,14 @@
 name: Deploy
 on:
-  workflow_call:
+  workflow_dispatch:
 jobs:
   deploy:
     name: Deploy to production server
     runs-on: ubuntu-latest
+    env:
+      SECRET_CONN_STRING: ${{ secrets.SECRET_CONN_STRING }}
     steps:
-      - run: echo "Deploying..."
+      - name: Hello
+        run: echo "`jq '.connectionStrings.myConnectionString="$SECRET_CONN_STRING"' appSettings.json`" > appSettings.json
+      - name: read json
+        run: cat json
