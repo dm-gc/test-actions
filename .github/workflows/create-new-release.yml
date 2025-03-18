@@ -29,7 +29,7 @@ jobs:
     name: Calculate next version
     runs-on: ubuntu-latest
     outputs:
-      next_version: ${{ steps.bump_version.outputs.NEXT_VERSION }}
+      next_version: ${{ steps.finalize_release_name.outputs.NEXT_VERSION }}
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -51,7 +51,6 @@ jobs:
 
     - name: Bump version
       if: "${{ github.event.inputs.bump_type != '' }}"
-      id: bump_version
       run: |
         MAJOR=$(echo "$LATEST_VERSION" | cut -d. -f1)
         MINOR=$(echo "$LATEST_VERSION" | cut -d. -f2)
@@ -66,12 +65,16 @@ jobs:
         elif [ "${{ inputs.bump_type }}" == "patch" ]; then
           PATCH=$((PATCH+1))
         fi
-        echo "NEXT_VERSION=$MAJOR.$MINOR.$PATCH" >> $GITHUB_OUTPUT
+        echo "NEXT_VERSION=$MAJOR.$MINOR.$PATCH" >> $GITHUB_ENV
 
     - name: Manually set release name
       if: "${{ github.event.inputs.custom_release_name != '' }}"
-      run: echo "NEXT_VERSION=${{ github.event.inputs.custom_release_name }}" >> $GITHUB_OUTPUT
-        
+      run: echo "NEXT_VERSION=${{ github.event.inputs.custom_release_name }}" >> $GITHUB_ENV
+
+    - name: Finalize release name
+      id: finalize_release_name
+      run: echo "NEXT_VERSION=$NEXT_VERSION" >> $GITHUB_OUTPUT
+
   update_csproj:
       name: Update .csproj
       runs-on: ubuntu-latest
