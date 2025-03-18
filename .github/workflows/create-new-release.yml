@@ -94,4 +94,6 @@ jobs:
   deploy:
     name: Deploy
     needs: [create_tag_and_release]
+    permissions:
+      contents: write
     uses: ./.github/workflows/deploy.yml
