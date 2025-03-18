@@ -70,7 +70,7 @@ jobs:
 
     - name: Manually set release name
       if: "${{ github.event.inputs.custom_release_name != '' }}"
-      run: echo "NEXT_VERSION=${{ github.event.inputs.custom_release_name" >> $GITHUB_OUTPUT
+      run: echo "NEXT_VERSION=${{ github.event.inputs.custom_release_name }}" >> $GITHUB_OUTPUT
         
   update_csproj:
       name: Update .csproj
