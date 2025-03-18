@@ -2,11 +2,22 @@ name: Create new release
 on:
   workflow_dispatch:
     inputs:
-      name:
+      bump_type:
         description: 'Major, minor, patch?'
-        default: 'patch'
-        required: true
+        options: 
+        - ''
+        - major
+        - minor
+        - patch
+        required: false
+        type: choice
+
+      custom_release_name:
+        description: 'Custom release name'
+        default: '0.0.0'
+        required: false
         type: string
+
 jobs:
   lint_test_build:
     name: Lint, test and build
@@ -20,38 +31,47 @@ jobs:
     outputs:
       next_version: ${{ steps.bump_version.outputs.NEXT_VERSION }}
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v4
+      if: "${{ github.event.inputs.bump_type != '' }}"
       with:
         fetch-depth: 0
         
     - name: Get latest tag
+      if: "${{ github.event.inputs.bump_type != '' }}"
       run: | 
         LATEST_TAG=$(git describe --tags --match "v*" --abbrev=0 2>/dev/null || echo "v0.0.0")
         echo "LATEST_TAG=$LATEST_TAG" >> $GITHUB_ENV
 
     - name: Remove v prefix
+      if: "${{ github.event.inputs.bump_type != '' }}"
       run: |    
         LATEST_VERSION=$(echo "$LATEST_TAG" | sed 's/v//')
         echo "LATEST_VERSION=$LATEST_VERSION" >>  $GITHUB_ENV
 
     - name: Bump version
+      if: "${{ github.event.inputs.bump_type != '' }}"
       id: bump_version
       run: |
         MAJOR=$(echo "$LATEST_VERSION" | cut -d. -f1)
         MINOR=$(echo "$LATEST_VERSION" | cut -d. -f2)
         PATCH=$(echo "$LATEST_VERSION" | cut -d. -f3)
-        if [ "${{ inputs.name }}" == "major" ]; then
+        if [ "${{ inputs.bump_type }}" == "major" ]; then
           MAJOR=$((MAJOR+1))
           MINOR=0
           PATCH=0
-        elif [ "${{ inputs.name }}" == "minor" ]; then 
+        elif [ "${{ inputs.bump_type }}" == "minor" ]; then 
           MINOR=$((MINOR+1))
           PATCH=0
-        elif [ "${{ inputs.name }}" == "patch" ]; then
+        elif [ "${{ inputs.bump_type }}" == "patch" ]; then
           PATCH=$((PATCH+1))
         fi
         echo "NEXT_VERSION=$MAJOR.$MINOR.$PATCH" >> $GITHUB_OUTPUT
-  
+
+    - name: Manually set release name
+      if: "${{ github.event.inputs.custom_release_name != '' }}"
+      run: echo "NEXT_VERSION=${{ github.event.inputs.custom_release_name" >> $GITHUB_OUTPUT
+        
   update_csproj:
       name: Update .csproj
       runs-on: ubuntu-latest
